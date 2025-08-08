@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parts Configurator</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="logo">
+                    <div class="logo-text">Parts Configurator</div>
+                    <div class="logo-subtitle">Professional Manufacturing</div>
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="header-btn">
+                    <i class="fas fa-download"></i>
+                    Export
+                </button>
+                <button class="header-btn">
+                    <i class="fas fa-share"></i>
+                    Share
+                </button>
+                <div class="user-profile">
+                    <span class="company-name">Fictiv</span>
+                    <div class="avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Left Sidebar - Parts List -->
+            <aside class="sidebar left-sidebar">
+                <div class="sidebar-header">
+                    <div class="header-content">
+                        <h3>Parts</h3>
+                        <button class="add-part-btn" id="addPartBtn" title="Add Part">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <input type="file" id="partFileInput" accept=".stl,.obj,.step,.stp" style="display: none;">
+                
+                <div class="parts-list" id="partsList">
+                    <!-- Parts will be loaded here -->
+                </div>
+                
+                <div class="collapsed-parts" id="collapsedParts">
+                    <!-- Collapsed parts will be shown here -->
+                </div>
+            </aside>
+
+            <!-- Center Panel - Configuration and AI -->
+            <main class="center-panel">
+                <div class="panel-content">
+                    <!-- Quote Section -->
+                    <div class="quote-section">
+                        <input type="text" class="quote-name-input" placeholder="New Quote" value="New Quote">
+                    </div>
+
+                    <!-- AI Helper Section -->
+                    <div class="ai-helper-section" id="aiHelperSection">
+                        <h3>Configuration Assistant</h3>
+                        
+                        <div class="ai-response" id="aiResponse" style="display: none;">
+                            <div class="response-header">
+                                <div class="response-header-left">
+                                    <i class="fas fa-robot"></i>
+                                    <span>AI Response</span>
+                                </div>
+                                <button class="minimize-btn" id="minimizeResponse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                            <div class="response-content" id="responseContent"></div>
+                            <div class="response-actions">
+                                <button class="action-btn-small" id="clearChat">
+                                    <i class="fas fa-trash"></i>
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="ai-input-container">
+                            <div class="input-wrapper">
+                                <div class="input-content" id="inputContent">
+                                    <input type="text" class="ai-input" id="aiInput" placeholder="Configure 6061 or Ask about materials...">
+                                </div>
+                                <div class="dropdown-arrow">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
+                            <button class="ai-send-btn" id="aiSendBtn">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+
+                        <div class="ai-dropdown" id="aiDropdown">
+                            <!-- Quick shortcuts and suggestions will appear here -->
+                        </div>
+                    </div>
+
+                    <!-- Manual Configuration Section -->
+                    <div class="manual-config-section">
+                        <h3>Manual Configuration</h3>
+                        
+                        <div class="config-row">
+                            <div class="config-group">
+                                <label>Material</label>
+                                <select class="config-select" id="materialSelect">
+                                    <option value="">Select Material</option>
+                                    <optgroup label="Aluminum Alloys">
+                                        <option value="aluminum-6061">Aluminum 6061-T6</option>
+                                        <option value="aluminum-7075">Aluminum 7075-T6</option>
+                                        <option value="aluminum-2024">Aluminum 2024-T3</option>
+                                        <option value="aluminum-5052">Aluminum 5052-H32</option>
+                                        <option value="aluminum-3003">Aluminum 3003-H14</option>
+                                    </optgroup>
+                                    <optgroup label="Stainless Steel">
+                                        <option value="steel-316">Stainless Steel 316</option>
+                                        <option value="steel-304">Stainless Steel 304</option>
+                                        <option value="steel-303">Stainless Steel 303</option>
+                                        <option value="steel-17-4">Stainless Steel 17-4 PH</option>
+                                        <option value="steel-410">Stainless Steel 410</option>
+                                    </optgroup>
+                                    <optgroup label="Titanium">
+                                        <option value="titanium-grade5">Titanium Grade 5 (Ti-6Al-4V)</option>
+                                        <option value="titanium-grade2">Titanium Grade 2</option>
+                                        <option value="titanium-grade23">Titanium Grade 23 (Ti-6Al-4V ELI)</option>
+                                    </optgroup>
+                                    <optgroup label="Steel">
+                                        <option value="steel-1018">Mild Steel 1018</option>
+                                        <option value="steel-4140">Alloy Steel 4140</option>
+                                        <option value="steel-4340">Alloy Steel 4340</option>
+                                        <option value="steel-8620">Alloy Steel 8620</option>
+                                    </optgroup>
+                                    <optgroup label="Copper Alloys">
+                                        <option value="copper-110">Copper 110</option>
+                                        <option value="copper-260">Brass 260</option>
+                                        <option value="copper-360">Brass 360</option>
+                                        <option value="copper-954">Aluminum Bronze 954</option>
+                                    </optgroup>
+                                    <optgroup label="Plastics">
+                                        <option value="plastic-abs">ABS Plastic</option>
+                                        <option value="plastic-pc">Polycarbonate (PC)</option>
+                                        <option value="plastic-pom">Acetal (POM)</option>
+                                        <option value="plastic-peek">PEEK</option>
+                                        <option value="plastic-ultem">Ultem (PEI)</option>
+                                    </optgroup>
+                                    <optgroup label="Nylon">
+                                        <option value="nylon-66">Nylon 6/6</option>
+                                        <option value="nylon-612">Nylon 6/12</option>
+                                        <option value="nylon-glass">Glass-Filled Nylon</option>
+                                        <option value="nylon-carbon">Carbon-Filled Nylon</option>
+                                    </optgroup>
+                                    <optgroup label="Other">
+                                        <option value="inconel-718">Inconel 718</option>
+                                        <option value="monel-400">Monel 400</option>
+                                        <option value="hastelloy-c276">Hastelloy C-276</option>
+                                        <option value="delrin">Delrin (Acetal)</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+
+                            <div class="config-group">
+                                <label>Finish</label>
+                                <select class="config-select" id="surfaceSelect">
+                                    <option value="">Select Finish</option>
+                                    <optgroup label="Standard Finishes">
+                                        <option value="as-machined">As Machined</option>
+                                        <option value="bead-blasted">Bead Blasted</option>
+                                        <option value="sand-blasted">Sand Blasted</option>
+                                        <option value="brushed">Brushed</option>
+                                    </optgroup>
+                                    <optgroup label="Anodizing (Aluminum)">
+                                        <option value="anodized-clear">Clear Anodized</option>
+                                        <option value="anodized-black">Black Anodized</option>
+                                        <option value="anodized-color">Color Anodized</option>
+                                        <option value="anodized-hard">Hard Anodized</option>
+                                    </optgroup>
+                                    <optgroup label="Plating">
+                                        <option value="chrome-plated">Chrome Plated</option>
+                                        <option value="nickel-plated">Nickel Plated</option>
+                                        <option value="zinc-plated">Zinc Plated</option>
+                                        <option value="gold-plated">Gold Plated</option>
+                                    </optgroup>
+                                    <optgroup label="Polishing">
+                                        <option value="polished-standard">Standard Polish</option>
+                                        <option value="polished-mirror">Mirror Polish</option>
+                                        <option value="polished-electro">Electropolish</option>
+                                    </optgroup>
+                                    <optgroup label="Coatings">
+                                        <option value="powder-coat">Powder Coat</option>
+                                        <option value="paint">Paint</option>
+                                        <option value="ceramic-coat">Ceramic Coating</option>
+                                        <option value="pvd-coat">PVD Coating</option>
+                                    </optgroup>
+                                    <optgroup label="Specialty">
+                                        <option value="passivation">Passivation (Stainless)</option>
+                                        <option value="pickling">Pickling (Stainless)</option>
+                                        <option value="black-oxide">Black Oxide</option>
+                                        <option value="phosphate">Phosphate Coating</option>
+                                    </optgroup>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="config-row-single">
+                            <div class="config-group">
+                                <label>Qty</label>
+                                <input type="number" class="config-input" id="quantityInput" placeholder="Enter quantity" min="1">
+                            </div>
+                        </div>
+
+                        <div class="config-row-single">
+                            <div class="config-group">
+                                <label>Tolerances</label>
+                                <select class="config-select" id="toleranceSelect">
+                                    <option value="">Select Tolerance</option>
+                                    <option value="loose">Loose (±0.5mm)</option>
+                                    <option value="standard">Standard (±0.1mm)</option>
+                                    <option value="precision">Precision (±0.05mm)</option>
+                                    <option value="ultra">Ultra Precision (±0.01mm)</option>
+                                    <option value="critical">Critical (±0.005mm)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="config-row-single">
+                            <div class="config-group">
+                                <label>Certifications and Inspections</label>
+                                <select class="config-select" id="certificationSelect">
+                                    <option value="">Select Certifications</option>
+                                    <option value="iso-9001">ISO 9001</option>
+                                    <option value="as9100">AS9100</option>
+                                    <option value="itaf-16949">IATF 16949</option>
+                                    <option value="iso-13485">ISO 13485</option>
+                                    <option value="fda">FDA</option>
+                                    <option value="ul">UL</option>
+                                    <option value="ce">CE</option>
+                                    <option value="rohs">RoHS</option>
+                                    <option value="reach">REACH</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Right Sidebar - 3D Viewer and Summary -->
+            <aside class="sidebar right-sidebar">
+                <div class="viewer-container">
+                    <div class="viewer-header">
+                        <h3>3D Viewer</h3>
+                        <div class="viewer-controls">
+                            <button class="viewer-btn" title="Reset View">
+                                <i class="fas fa-home"></i>
+                            </button>
+                            <button class="viewer-btn" title="Toggle Wireframe">
+                                <i class="fas fa-cube"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="viewer-canvas" id="viewerCanvas">
+                        <canvas id="threejsCanvas" style="width: 100%; height: 100%; display: none;"></canvas>
+                        <div class="placeholder-3d" id="placeholder3d">
+                            <i class="fas fa-cube"></i>
+                            <p>3D Model Viewer</p>
+                            <small>Select a part to view</small>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button class="action-btn">
+                            <i class="fas fa-eye"></i>
+                            Review DFM
+                        </button>
+                        <button class="action-btn">
+                            <i class="fas fa-upload"></i>
+                            Upload Drawing
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="summary-card">
+                    <h3>Summary</h3>
+                    <div class="summary-content" id="summaryContent">
+                        <div class="summary-placeholder" id="summaryPlaceholder">
+                            <i class="fas fa-info-circle"></i>
+                            <p>No parts configured</p>
+                        </div>
+                        <div class="summary-details" id="summaryDetails" style="display: none;">
+                            <div class="summary-row pricing-row">
+                                <div class="pricing-label">
+                                    <i class="fas fa-tag"></i>
+                                    <span>Preferred pricing</span>
+                                    <span class="discount-tag">(5% off)</span>
+                                </div>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Part production (1 part)</span>
+                                <span class="summary-value" id="productionCost">$0.00</span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">Shipping (No tariffs apply)</span>
+                                <span class="summary-value" id="shippingCost">$0.00</span>
+                            </div>
+                            <div class="summary-row shipping-option">
+                                <div class="shipping-selector">
+                                    <span class="summary-label">Overnight (next business day)</span>
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">
+                                    Tax
+                                    <i class="fas fa-info-circle tax-info"></i>
+                                </span>
+                                <span class="summary-value" id="taxCost">$0.00</span>
+                            </div>
+                            <div class="summary-row total-row">
+                                <span class="summary-label">Order total</span>
+                                <span class="summary-value price" id="orderTotal">$0.00</span>
+                            </div>
+                            <div class="summary-actions">
+                                <button class="action-btn checkout-btn">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    Begin checkout
+                                </button>
+                                <button class="action-btn download-btn">
+                                    <i class="fas fa-download"></i>
+                                    Download quote
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
